@@ -4,38 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Titanic Survival Prediction</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <h1>Titanic Survival Prediction</h1>
-    <form method="post" action="/predict">
-        <label for="Pclass">Passenger Class:</label>
-        <select name="Pclass">
-            <option value="1">1st</option>
-            <option value="2">2nd</option>
-            <option value="3">3rd</option>
-        </select>
-        <label for="Sex">Sex:</label>
-        <select name="Sex">
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-        </select>
-        <label for="Age">Age:</label>
-        <input type="number" name="Age" step="0.1" required>
-        <label for="Fare">Fare:</label>
-        <input type="number" name="Fare" step="0.01" required>
-        <label for="Embarked">Embarked:</label>
-        <select name="Embarked">
-            <option value="C">Cherbourg</option>
-            <option value="Q">Queenstown</option>
-            <option value="S">Southampton</option>
-        </select>
-        <label for="FamilySize">Family Size:</label>
-        <input type="number" name="FamilySize" required>
+    <form id="prediction-form">
+        <!-- Form inputs here -->
         <button type="submit">Predict</button>
     </form>
-    {% if prediction %}
-        <h2>Prediction: {{ prediction }}</h2>
-    {% endif %}
+    <div id="result"></div>
+
+    <script>
+    $(document).ready(function() {
+        $('#prediction-form').submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/predict',
+                type: 'post',
+                data: $('#prediction-form').serialize(),
+                success: function(response) {
+                    $('#result').text('Prediction: ' + response.prediction);
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>
